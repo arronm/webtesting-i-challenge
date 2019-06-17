@@ -42,10 +42,20 @@ const checkItem = item => {
 };
 
 function succeed(item) {
-  return { ...item };
+  const { enhancement } = item;
+  if (!checkItem(item)) {
+    return false;
+  }
+  return {
+    ...item,
+    enhancement: enhancement + 1 >= 20 ? 20 : enhancement + 1
+  };
 }
 
 function fail(item) {
+  if (!checkItem(item)) {
+    return false;
+  }
   return { ...item };
 }
 

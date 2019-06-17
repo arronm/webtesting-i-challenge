@@ -4,7 +4,8 @@
   "description": "In this project, you will demonstrate proficiency by writing unit tests and production code to satisfy the _Minimum Viable Product_ described below.",
   "main": "index.js",
   "scripts": {
-    "test": "jest --watch --coverage"
+    "test": "jest --watch --coverage",
+    "coverage": "jest --coverage"
   },
   "repository": {
     "type": "git",

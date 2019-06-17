@@ -33,6 +33,7 @@ const baseTests = fn => {
   });
 
   it('returns an object with an item shape', () => {
+    // TODO: refactor this to use a loop
     const newItem = fn(item);
     expect(newItem).toHaveProperty('name');
     expect(newItem).toHaveProperty('enhancement');
@@ -47,19 +48,74 @@ const baseTests = fn => {
 describe('enhancer', () => {
   describe('repairs', () => {
     baseTests(repair);
-    it.todo('an items durability to 100');
-    it.todo('cannot have a durability of < 0 or > 100');
+    it('an items durability to 100', () => {
+      expect(repair(item)).toEqual({
+        ...item,
+        durability: 100,
+      });
+      expect(repair({
+        ...item,
+        durability: 20.1927834711982374981237491823749128374,
+      })).toEqual({
+        ...item,
+        durability: 100,
+      });
+    });
+    it('cannot have a durability of < 0 or > 100', () => {
+      expect(
+        repair({
+          ...item,
+          durability: 500,
+        })
+      ).toBeFalsy();
+      expect(
+        repair({
+          ...item,
+          durability: -300,
+        })
+      ).toBeFalsy();
+    });
   });
 
   describe('succeeds', () => {
-    it.todo('cannot have an enhancement below or above 20');
-    it.todo('will not increase enhancement over 20');
-    it.todo('will increment the enhancement level');
+    baseTests(succeed);
+    it('cannot have an enhancement below or above 20', () => {
+      expect(
+        succeed({
+          ...item,
+          enhancement: 100
+        })
+      ).toBeFalsy();
+      expect(
+        succeed({
+          ...item,
+          enhancement: -30
+        })
+      ).toBeFalsy();
+    });
+    it('will not increase enhancement over 20', () => {
+      expect(
+        succeed({
+          ...item,
+          enhancement: 20
+        })
+      ).toEqual({
+        ...item,
+        enhancement: 20
+      });
+    });
+    it('will increment the enhancement level', () => {
+      expect(succeed(item)).toEqual({ ...item, enhancement: 1 });
+    });
   });
 
   describe('fails', () => {
-    it.todo('will reduce the durability based on initial enhancement level');
-    it.todo('will reduce the enhancement level by 1 if it is greater than 16 initially');
+    it('will reduce the durability based on initial enhancement level', () => {
+
+    });
+    it('will reduce the enhancement level by 1 if it is greater than 16 initially', () => {
+      
+    });
   })
 
   describe('gets', () => {
