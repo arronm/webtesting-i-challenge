@@ -1,4 +1,5 @@
 const enhancer = require('./enhancer.js');
+const { repair, succeed, fail, get } = enhancer;
 
 let item = {
   name: 'Helmet',
@@ -6,8 +7,46 @@ let item = {
   enhancement: 0,
 };
 
+let itemTypes = {
+  name: 'string',
+  durability: 'number',
+  enhancement: 'number'
+};
+
+const baseTests = fn => {
+  it('exists', () => {
+    expect(typeof fn).toBe('function');
+  });
+
+  it('only accepts an object with an item shape', () => {
+    expect(fn('not an item')).toBeFalsy();
+    expect(fn(33)).toBeFalsy();
+    expect(fn({ random: 'object' })).toBeFalsy();
+
+    Object.keys(item).forEach(key => {
+      let value = 'cheese';
+      if (itemTypes[key] === 'string') {
+        value = 33;
+      }
+      expect(fn({ ...item, [key]: value })).toBeFalsy();
+    });
+  });
+
+  it('returns an object with an item shape', () => {
+    const newItem = fn(item);
+    expect(newItem).toHaveProperty('name');
+    expect(newItem).toHaveProperty('enhancement');
+    expect(newItem).toHaveProperty('durability');
+
+    expect(typeof newItem.name).toBe(itemTypes.name);
+    expect(typeof newItem.enhancement).toBe(itemTypes.enhancement);
+    expect(typeof newItem.durability).toBe(itemTypes.durability);
+  });
+}
+
 describe('enhancer', () => {
   describe('repairs', () => {
+    baseTests(repair);
     it.todo('an items durability to 100');
     it.todo('cannot have a durability of < 0 or > 100');
   });
