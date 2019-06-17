@@ -110,15 +110,60 @@ describe('enhancer', () => {
   });
 
   describe('fails', () => {
-    it('will reduce the durability based on initial enhancement level', () => {
-
+    baseTests(fail);
+    it("will reduce the durability by 5 if enhancement is less than 15", () => {
+      expect(fail(item)).toEqual({
+        ...item,
+        durability: 18
+      });
     });
-    it('will reduce the enhancement level by 1 if it is greater than 16 initially', () => {
-      
+
+    it("will reduce the durability by 10 if enhancement is >= 15", () => {
+      expect(
+        fail({
+          ...item,
+          enhancement: 15
+        })
+      ).toEqual({
+        ...item,
+        enhancement: 15,
+        durability: 13
+      });
+    });
+
+    it("will reduce the enhancement level by 1 if it is greater than 16", () => {
+      expect(
+        fail({
+          ...item,
+          enhancement: 17
+        })
+      ).toEqual({
+        ...item,
+        enhancement: 16,
+        durability: 13
+      });
     });
   })
 
   describe('gets', () => {
-    it.todo('will get the name of the item based on the enhancement level');
+    const { get } = enhancer;
+    baseTests(get);
+
+    it('does not rename an item with enhancement level 0', () => {
+      expect(get(item)).toEqual(item);
+    });
+
+    it('will append the enhancement level to the name if it is > 0', () => {
+      expect(
+        get({
+          ...item,
+          enhancement: 3
+        })
+      ).toEqual({
+        ...item,
+        enhancement: 3,
+        name: item.name + " [+3]"
+      });
+    });
   })
 });
