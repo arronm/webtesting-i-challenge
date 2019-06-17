@@ -53,10 +53,18 @@ function succeed(item) {
 }
 
 function fail(item) {
+  const { enhancement, durability } = item;
   if (!checkItem(item)) {
     return false;
   }
-  return { ...item };
+  const durabilityReduction = enhancement >= 15 ? 10 : 5;
+  const enhancementReduction = enhancement > 16 ? 1 : 0;
+
+  return {
+    ...item,
+    enhancement: enhancement - enhancementReduction,
+    durability: durability - durabilityReduction
+  };
 }
 
 function repair(item) {
@@ -71,5 +79,15 @@ function repair(item) {
 }
 
 function get(item) {
-  return { ...item };
+  if (!checkItem(item)) {
+    return false;
+  }
+  if (item.enhancement > 0) {
+    return {
+      ...item,
+      name: item.name + ` [+${item.enhancement}]`
+    };
+  } else {
+    return item;
+  }
 }
