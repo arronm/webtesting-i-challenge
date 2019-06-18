@@ -33,15 +33,12 @@ const baseTests = fn => {
   });
 
   it('returns an object with an item shape', () => {
-    // TODO: refactor this to use a loop
     const newItem = fn(item);
-    expect(newItem).toHaveProperty('name');
-    expect(newItem).toHaveProperty('enhancement');
-    expect(newItem).toHaveProperty('durability');
 
-    expect(typeof newItem.name).toBe(itemTypes.name);
-    expect(typeof newItem.enhancement).toBe(itemTypes.enhancement);
-    expect(typeof newItem.durability).toBe(itemTypes.durability);
+    Object.keys(item).forEach(key => {
+      expect(newItem).toHaveProperty(key);
+      expect(typeof newItem[key]).toBe(itemTypes[key]);
+    });
   });
 }
 
